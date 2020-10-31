@@ -1,0 +1,269 @@
+
+
+	
+	
+	
+
+	
+
+ <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script type="text/javascript">
+
+		var todo_list = []; 
+
+		var todo_name,todo_date,priority,todo_id,id_counter=0;
+
+		var display;
+
+		var obj = new Array();
+		
+		function add_list_toarray(){
+			todo_name = document.getElementById("todo_name").value;
+			todo_date = document.getElementById("due_date").value;
+			
+			if (document.getElementById("defaultChecked").checked) {
+				priority= document.getElementById("defaultChecked").value;
+			}
+			else if (document.getElementById("defaultUnchecked").checked) {
+				priority = document.getElementById("defaultUnchecked").value;
+			}
+			pushToAry(todo_name,todo_date, priority);
+			
+			
+		}
+
+
+		function pushToAry(todo_name,todo_date, priority) {
+			
+			var obj = {};
+			obj.todo_name = todo_name;
+			obj.todo_date=todo_date;
+			obj.priority=priority;
+			obj.todo_id=id_counter;
+			obj.todo_task_complete=false;
+
+			id_counter++;	
+
+			todo_list.push(obj);
+			display_list();
+
+		}
+		
+		function display_list(){
+			$("#display_todo_list1").empty();
+			for(let i=0;i<todo_list.length;i++){
+				if(todo_list[i].todo_task_complete===false){
+
+					display = '<div class="row"  id='+todo_list[i].todo_id+'>';
+					display += '<div class="col-sm-3">'+todo_list[i].todo_name+'</div>';
+					display += '<div class="col-sm-3">'+todo_list[i].todo_date+'</div>';
+					display += '<div class="col-sm-3">'+todo_list[i].priority+'  </div>';
+					display += '<div class="col-sm-3" onclick="remove_todo_list('+ todo_list[i].todo_id +')"> <i class="fa fa-trash"  name="ddd"></i> </div>';
+					display += '</div>';
+
+					$("#display_todo_list1").append(display);
+				}
+			}
+		}
+
+        function display_list2(){
+			$("#display_todo_list2").empty();
+			for(let i=0;i<todo_list.length;i++){
+				if(todo_list[i].todo_task_complete===true){
+
+					display = '<div class="row"  id='+todo_list[i].todo_id+'>';
+					display += '<div class="col-sm-3">'+todo_list[i].todo_name+'</div>';
+					display += '<div class="col-sm-3">'+todo_list[i].todo_date+'</div>';
+					display += '<div class="col-sm-3">'+todo_list[i].priority+'  </div>';
+					display += '<div class="col-sm-3" >Task completed  </div>';
+					display += '</div>';
+
+					$("#display_todo_list2").append(display);
+				}
+			}
+		}
+		function remove_todo_list(id) {
+    	// Removes an element from the document
+    	alert("trying to remove ...."+id);
+    	todo_list[id].todo_task_complete=true;
+    	display_list();
+        display_list2();
+
+    }
+
+
+    $(document).ready(function () {
+    	$('#todo_add').click(function(){
+    		if(document.getElementById("todo_name").value == ""){
+    			alert("Enter todo name");
+    			document.getElementById("todo_name").focus();
+    		}
+
+    		else if(document.getElementById("due_date").value == ""){
+    			alert("Enter due date");
+    			document.getElementById("due_date").focus();
+    		}
+    		else {
+
+    			add_list_toarray();
+
+				 // clearing previous data
+				 document.getElementById("todo_name").value="";
+				 document.getElementById("due_date").value="";
+				 console.log(todo_list);
+
+				}
+
+				
+			});
+
+
+
+
+    	$(document).on("click", ".delete", function(){
+    		$(this).parents(".row").remove();
+
+    	});
+
+    });
+
+</script>
+<style type="text/css">
+	#main{
+
+		margin-top :60px;
+		margin-left: 250px;
+		width:65% ;
+		padding: 5px;
+	}
+
+	div{
+		padding: 2px;
+	}
+
+	body {
+		background-color: #ABEBC6 ;
+	}
+	#display_todo_list{
+		background-color: #7DCEA0;
+		margin-left: 240px;
+		margin-top :50px;
+		padding: 5px;
+		width:60%;
+
+	}
+	#display_todo_list1 ,#display_todo_list2 {
+		background-color: #7DCEA0;
+		margin-left: 240px;
+
+		padding: 5px;
+		width:60%;
+
+	}
+ 
+
+</style>
+
+
+
+
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="alert alert-success">
+			<center><strong>Todo App</strong> Daily activity reminder app..  </center>
+		</div>
+		<div id="main">
+			<!-- input elements ---->
+			<div class="row">
+				<div class="col-sm-3"> <!-- input todo name ---->
+					<div>
+						<label> Enter the Todo Name </label>
+						<input type="text" id="todo_name" size ="10px">
+					</div>
+				</div>
+
+				<div class="col-sm-3"><!-- Select date---->
+					<label> Enter date </label>
+					<input type="date" id="due_date">
+				</div>
+
+				<div class="col-sm-2"><!-- Select any one radio button---->
+					<label> Priority </label>
+
+					<div class="custom-control custom-radio">
+						<input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios" value="high">
+						<label class="custom-control-label" for="defaultUnchecked">High</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</div> 
+
+					<!-- Default checked -->
+					<div class="custom-control custom-radio">
+						<input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" value="low" checked>
+						<label class="custom-control-label" for="defaultChecked">Low</label>
+					</div>
+					
+
+				</div>
+				<div class="col-sm-4"><!--  button to add ---->
+
+					<button type="button" id="todo_add" class="btn btn-success">Add to Todo list</button>
+
+
+				</div>
+			</div>
+		</div> <!-- Main  div tag ends here---->
+
+
+		<div id="display_todo_list"> <center><h4> Todo List</h4> </center>
+			<div class="row">
+				<div class="col-sm-3">Todo Name</div>
+				<div class="col-sm-3">Due Date</div>
+				<div class="col-sm-3"> Priority </div>
+				<div class="col-sm-3"> Delete </div>
+			</div>
+
+
+		</div>
+
+		<div id="display_todo_list1">
+
+
+
+		</div>
+		
+		<div id="display_todo_list"><center><h4> Completed Todo List</h4> </center> 
+			<div class="row">
+				<div class="col-sm-3">Todo Name</div>
+				<div class="col-sm-3">Due Date</div>
+				<div class="col-sm-3"> Priority </div>
+				<div class="col-sm-3"> Status </div>
+			</div>
+
+
+		</div>
+
+		<div id="display_todo_list2">
+
+
+
+		</div>
+	</div>
+</div>
+</div>
+
+</body>
+</html>
